@@ -1,0 +1,7 @@
+{
+  "name": "agencybox-application",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
