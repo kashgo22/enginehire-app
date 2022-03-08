@@ -1,38 +1,39 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import TabsPage from '../views/TabsPage.vue'
+import { createRouter, createWebHistory } from "@ionic/vue-router";
+
+// Will uncomment,  when you have more routes
+
+// const ifAuthenticated = (to, from, next) => {
+//   if (localStorage.getItem("eh-token")) {
+//     next();
+//   } else {
+//     next({ name: "LoginPage" });
+//   }
+// };
+
+// const ifNotAuthenticated = (to, from, next) => {
+//   if (!localStorage.getItem("eh-token")) {
+//     next();
+//   } else {
+//     next({ name: "Home" });
+//   }
+// };
 
 const routes = [
   {
-    path: '/',
-    redirect: '/tabs/tab1'
+    path: "/",
+    redirect: "/home",
   },
   {
-    path: '/tabs/',
-    component: TabsPage,
-    children: [
-      {
-        path: '',
-        redirect: '/tabs/tab1'
-      },
-      {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
-      },
-      {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
-      },
-      {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
-      }
-    ]
-  }
-]
+    path: "/home",
+    name: "HomePage",
+    component: () => import("../views/Home.vue"),
+    // beforeEnter: ifAuthenticated,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
