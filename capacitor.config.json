@@ -1,0 +1,6 @@
+{
+	"appId": "com.ionic.grundsteuer",
+	"appName": "Agencybox App",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import store from './store/index';
+// import { ValidationProvider, extend } from 'vee-validate';
 import {
   IonicVue,
   IonContent,
@@ -84,10 +86,12 @@ const globalComponents = {
 }
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
-  Object.entries(globalComponents).forEach(([name, component]) => {
-    app.component(name, component)
-  })  
+  .use(router)
+  .use(store);
+Object.entries(globalComponents).forEach(([name, component]) => {
+  app.component(name, component)
+})  
+
 router.isReady().then(() => {
   app.mount('#app');
 });

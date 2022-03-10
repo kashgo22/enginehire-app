@@ -18,7 +18,7 @@ const getters = {
 const actions = {
   async getCurrentUser({ commit }) {
     commit("setUserStart");
-    const { success, data, errors } = await AuthService.getCurrentUser();
+    const { success, data, errors } = await AuthService.getUser();
     if (success) {
       commit("setUserData", data);
     } else {

@@ -29,6 +29,12 @@ const routes = [
     component: () => import("../views/Home.vue"),
     // beforeEnter: ifAuthenticated,
   },
+  {
+    path: "/login",
+    name: "LoginPage",
+    component: () => import("../views/Login.vue"),
+    // beforeEnter: ifAuthenticated,
+  },
 ];
 
 const router = createRouter({
