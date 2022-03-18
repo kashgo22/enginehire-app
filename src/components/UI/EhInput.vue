@@ -1,7 +1,7 @@
 <template>
   <ion-item>
     <ion-label :class="labelClasses" position="floating">{{ label }}</ion-label>
-    <ion-input v-bind="$attrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"></ion-input>
+    <ion-input v-bind="$attrs" :value="inputVal" @input="inputHandler"></ion-input>
     <ion-note v-for="error in errors" :key="error.id" class="text-sm" color="danger">{{error}}</ion-note>
   </ion-item>
 </template>
@@ -28,9 +28,28 @@ export default defineComponent({
       default: () => [],
     },
   },
+  created() {
+    this.inputValue = this.modelValue;
+  },
+  watch: {
+    modelValue: {
+      immediate: true,
+      handler(val) {
+        this.inputVal = val;
+      },
+    },
+  },
+  data: () => ({
+      inputVal: ''
+  }),
   computed: {
     labelClasses() {
       return this.labelClass + ' text-light text-base uppercase';
+    },
+  },
+  methods: {
+    inputHandler(event) {
+      this.$emit("update:modelValue", event.target.value);
     },
   },
 });

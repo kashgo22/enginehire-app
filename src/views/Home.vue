@@ -1,42 +1,27 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Home</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Home</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ExploreContainer name="Home page" />
-    </ion-content>
-  </ion-page>
+  <eh-main-layout>
+    <template #content>
+      <ion-grid>
+        <ion-row>
+         <ion-col>
+            <ion-title  class="text-3xl font-semibold font-quicksand mt-16 text-center">Home</ion-title>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </template>
+  </eh-main-layout>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-} from "@ionic/vue";
-import ExploreContainer from "@/components/ExploreContainer.vue";
+import EhMainLayout from "../layouts/EhMainLayout.vue";
 
 export default defineComponent({
   name: "HomePage",
   components: {
-    ExploreContainer,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonPage,
+    EhMainLayout,
   },
 });
 </script>
+
+<style scoped></style>

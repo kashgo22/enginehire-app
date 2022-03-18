@@ -1,46 +1,49 @@
 <template>
   <ion-page class="content-bg-primary">
+    <ion-loading v-if="isLoading" :is-open="isLoading" message="Loading..." />
     <ion-content :fullscreen="true">
-      <ion-grid class="h-100 p-30 flex-align-center flex-justify-center">
+      <ion-grid class="h-full p-30 flex items-center justify-center">
         <ion-row
-          class="content-wrapper h-100 w-100 flex-align-center flex-justify-around"
+          class="content-wrapper h-full w-full flex items-center justify-around"
         >
-          <ion-col size="12" class="flex-column flex-align-center">
+          <ion-col size="12" class="flex flex-col items-center">
             <ion-icon
               class="fs-140"
               color="light"
               name="person-circle-outline"
             />
             <ion-text
-              class="section-heading text-align-center text-3xl"
+              class="section-heading text-center text-3xl"
               color="light"
             >
               Login
             </ion-text>
           </ion-col>
-          <ion-col size="12" class="input-fields flex-column">
-            <input-field
+          <ion-col size="12" class="input-fields flex flex-col">
+            <eh-input
               :errors="errors.email"
               v-model="form.email"
-              class="text-light text-lg"
+              class="text-light text-lg pb-0"
               type="text"
               label="Email"
             />
-            <input-field
+            <eh-input
               :errors="errors.password"
               v-model="form.password"
-              class="text-light text-lg"
+              class="text-light text-lg pb-0"
               type="password"
               label="Password"
             />
-            <button
+            <ion-button
               type="submit"
-              expand="expand"
-              class="py-12 bg-light text-primary text-xl shadow-lg rounded-full my-20"
-              > Login </button
+              color="light"
+              class="text-primary text-lg shadow-lg rounded-full my-20"
+              @click="handleSubmit"
             >
+              Login
+            </ion-button>
           </ion-col>
-          <ion-text class="text-light uppercase flex-justify-center gap-5">
+          <ion-text class="text-light uppercase justify-center gap-5">
             Don't have an acccount?
             <ion-router-link href="#" class="underline">
               Sign up
@@ -54,32 +57,12 @@
 
 <script>
 import { defineComponent } from "vue";
-import InputField from "@/components/InputField.vue";
-import {
-  IonPage,
-  IonContent,
-  IonText,
-  IonIcon,
-  IonGrid,
-  IonCol,
-  IonRow,
-} from "@ionic/vue";
 import { addIcons } from "ionicons";
 import { personCircleOutline } from "ionicons/icons";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default defineComponent({
   name: "LoginPage",
-  components: {
-    IonContent,
-    IonPage,
-    IonText,
-    IonIcon,
-    InputField,
-    IonGrid,
-    IonCol,
-    IonRow,
-  },
   created() {
     addIcons({
       "person-circle-outline": personCircleOutline,
@@ -87,6 +70,7 @@ export default defineComponent({
   },
   data() {
     return {
+      isLoading: false,
       form: {
         email: "",
         password: "",
@@ -98,20 +82,45 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions("auth", ["getCurrentUser"]),
-    handleSubmit() {
+    ...mapActions("auth", ["login", "getCurrentUser"]),
+    async handleSubmit() {
       this.errors.email = [];
       this.errors.password = [];
-      if (!this.form.email) {
+      const { email, password } = this.form;
+      if (!email) {
         this.errors.email.push("Email is required.");
       }
-      if (!this.form.email) {
+      if (!password) {
         this.errors.password.push("Password is required.");
       }
-      if (this.form.email && this.form.password) {
-        // this.getCurrentUser();
+      if (email && password) {
+        const body = {
+          agency: 70,
+          username: email,
+          password: password,
+        };
+        this.isLoading = true;
+        await this.login(body);
+        console.log(
+          "tryGet",
+          this.tryGet(() => this.userData.userId)
+        );
+        if (this.authErrors.length) {
+          alert(this.authErrors);
+        } else {
+          await this.getCurrentUser(this.userData.userId);
+          if (this.authErrors.length) {
+            alert(this.authErrors);
+          } else {
+            this.$router.push("/home");
+            this.isLoading = false;
+          }
+        }
       }
     },
+  },
+  computed: {
+    ...mapGetters("auth", ["authErrors", "userData"]),
   },
 });
 </script>
@@ -146,5 +155,8 @@ ion-icon {
   --highlight-background: var(
     --ion-color-secondary
   ); /* focused underline color */
+}
+.input-fields input {
+  padding-bottom: 0px !important;
 }
 </style>

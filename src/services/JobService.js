@@ -1,7 +1,7 @@
 import DataService from "./common/DataService";
 import Transformer from "../transformers"
 
-function errorResponse(e) {
+function errorResponse(e) { // move to transformer
   let errors = [];
   if (e.non_field_errors) {
     errors = e.non_field_errors
@@ -15,19 +15,18 @@ function errorResponse(e) {
 }
 
 export default {
-  async login(loginInfo) {
+  async getJobs({agencyId, userId}) {
     try {
-      const { data } = await DataService.post("api-token-auth/?resource=login", loginInfo);
-      console.log('Response From Login API ===>', data)
-      return Transformer.mapLoginData(data);
+      const { data } = await DataService.get(`api/jobs/?agency=${agencyId}&filler=${userId}`);
+      return Transformer.mapJobs(data);
     } catch (e) {
       return errorResponse(e);
     }
   },
-  async getUser(userId) {
+  async updateJob(jobId, jobInfo) {
     try {
-      const { data } = await DataService.get(`api/people/${userId}`);
-      return Transformer.mapUserData(data);
+      const { data } = await DataService.patch(`api/jobs/${jobId}`, jobInfo);
+      return Transformer.mapJobs(data);
     } catch (e) {
       return errorResponse(e);
     }

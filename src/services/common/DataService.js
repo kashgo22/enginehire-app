@@ -1,16 +1,15 @@
 import axios from "axios";
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: process.env.VUE_APP_BASE_URL,
 });
 
-console.log("baseURL", process.env.VUE_APP_API_URL);
+console.log("baseURL", process.env.VUE_APP_BASE_URL);
 
 instance.interceptors.request.use((request) => {
   const token = localStorage.getItem("eh-token");
   if (token) {
-    request.headers["Authorization"] = `Bearer ${token}`;
+    request.headers["Authorization"] = `Token ${token}`;
   }
-
   return request;
 });
 

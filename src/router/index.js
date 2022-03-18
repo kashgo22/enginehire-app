@@ -1,39 +1,49 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 
-// Will uncomment,  when you have more routes
+const ifAuthenticated = (to, from, next) => {
+  if (localStorage.getItem("eh-token")) {
+    next();
+  } else {
+    next({ name: "LoginPage" });
+  }
+};
 
-// const ifAuthenticated = (to, from, next) => {
-//   if (localStorage.getItem("eh-token")) {
-//     next();
-//   } else {
-//     next({ name: "LoginPage" });
-//   }
-// };
-
-// const ifNotAuthenticated = (to, from, next) => {
-//   if (!localStorage.getItem("eh-token")) {
-//     next();
-//   } else {
-//     next({ name: "Home" });
-//   }
-// };
+const ifNotAuthenticated = (to, from, next) => {
+  if (!localStorage.getItem("eh-token")) {
+    next();
+  } else {
+    next({ name: "HomePage" });
+  }
+};
 
 const routes = [
   {
     path: "/",
-    redirect: "/home",
-  },
-  {
-    path: "/home",
-    name: "HomePage",
-    component: () => import("../views/Home.vue"),
-    // beforeEnter: ifAuthenticated,
+    redirect: "/login",
   },
   {
     path: "/login",
     name: "LoginPage",
     component: () => import("../views/Login.vue"),
-    // beforeEnter: ifAuthenticated,
+    beforeEnter: ifNotAuthenticated,
+  },
+  {
+    path: "/home",
+    name: "HomePage",
+    component: () => import("../views/Home.vue"),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: "/my-jobs",
+    name: "MyJobsPage",
+    component: () => import("../views/MyJobs.vue"),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: "/profile",
+    name: "ProfilePage",
+    component: () => import("../views/Profile.vue"),
+    beforeEnter: ifAuthenticated,
   },
 ];
 
