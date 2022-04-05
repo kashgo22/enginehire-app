@@ -37,31 +37,73 @@ function mapUserData(user) {
   };
 }
 
+function mapAgencyData(agency) {
+  return {
+    success: true,
+    errors: null,
+    data: {
+      agencyId: agency.id,
+      name: agency.name,
+      humanName: agency.human_name,
+      manualClocking: agency.manual_clocking,
+    },
+  };
+}
+
 function mapJobs(jobs) {
   return {
     success: true,
     errors: null,
     data: jobs.map(job => ({
       jobId: job.id,
+      agencyId: job.agency,
+      fillerId: job.filler,
+      fillerName: job.filler_name,
       posterName: job.poster_name,
-      startDate: job.date,
+      posterId: job.poster,
+      date: job.date,
       endDate: job.end_date,
       status: job.status,
       notes: job.text,
       candidateReviewed: job.candidate_reviewed,
       startTime: job.start_time,
       endTime: job.end_time,
+      actualStartDate: job.actual_start_date,
+      actualEndDate: job.actual_end_date,
       actualStartTime: job.actual_start_time,
       actualEndTime: job.actual_end_time,
       clockInNotes: job.clock_in_notes,
-      clockOutNotes: job.clock_out_notes
+      clockOutNotes: job.clock_out_notes,
+      address1: job.address1,
+      city: job.city,
+      provinceState: job.provincestate,
+      postalCode: job.postal_code,
+      candidateRate: job.candidate_rate,
     })
     ),
   };
 }
+// function mapReviews(reviews) {
+//   return {
+//     success: true,
+//     errors: null,
+//     data: reviews.map(review => ({
+//       jobId: review.job,
+//       approvedReview: review.approved_review,
+//       rating: review.rating,
+//       reviewerId: review.reviewer,
+//       review: review.text,
+//       recipientId: review.recipient
+//     })
+//     ),
+//   };
+// }
+
 export default {
   success,
   mapLoginData,
   mapUserData,
   mapJobs,
+  mapAgencyData, 
+  // mapReviews
 };

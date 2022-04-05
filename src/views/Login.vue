@@ -2,13 +2,14 @@
   <ion-page class="content-bg-primary">
     <ion-loading v-if="isLoading" :is-open="isLoading" message="Loading..." />
     <ion-content :fullscreen="true">
-      <ion-grid class="h-full p-30 flex items-center justify-center">
-        <ion-row
-          class="content-wrapper h-full w-full flex items-center justify-around"
-        >
+      <ion-grid class="h-full px-30 flex items-center justify-center">
+        <ion-row class="h-full w-full justify-between">
+          <ion-col size="12">
+            <ion-img class="profile-pic" :src="logo" alt="" />
+          </ion-col>
           <ion-col size="12" class="flex flex-col items-center">
             <ion-icon
-              class="fs-140"
+              class="fs-100"
               color="light"
               name="person-circle-outline"
             />
@@ -19,16 +20,14 @@
               Login
             </ion-text>
           </ion-col>
-          <ion-col size="12" class="input-fields flex flex-col">
+          <ion-col size="12" class="input-fields flex flex-col mt-22">
             <eh-input
-              :errors="errors.email"
               v-model="form.email"
               class="text-light text-lg pb-0"
               type="text"
               label="Email"
             />
             <eh-input
-              :errors="errors.password"
               v-model="form.password"
               class="text-light text-lg pb-0"
               type="password"
@@ -43,12 +42,6 @@
               Login
             </ion-button>
           </ion-col>
-          <ion-text class="text-light uppercase justify-center gap-5">
-            Don't have an acccount?
-            <ion-router-link href="#" class="underline">
-              Sign up
-            </ion-router-link>
-          </ion-text>
         </ion-row>
       </ion-grid>
     </ion-content>
@@ -60,6 +53,7 @@ import { defineComponent } from "vue";
 import { addIcons } from "ionicons";
 import { personCircleOutline } from "ionicons/icons";
 import { mapActions, mapGetters } from "vuex";
+import EhLogo from "../../public/assets/images/enginehire-logo.png";
 
 export default defineComponent({
   name: "LoginPage",
@@ -70,57 +64,46 @@ export default defineComponent({
   },
   data() {
     return {
-      isLoading: false,
       form: {
         email: "",
         password: "",
       },
-      errors: {
-        email: [],
-        password: [],
-      },
+      logo: EhLogo,
     };
   },
   methods: {
-    ...mapActions("auth", ["login", "getCurrentUser"]),
+    ...mapActions("auth", ["login", "getCurrentUser", "getCurrentAgency"]),
     async handleSubmit() {
-      this.errors.email = [];
-      this.errors.password = [];
       const { email, password } = this.form;
-      if (!email) {
-        this.errors.email.push("Email is required.");
-      }
-      if (!password) {
-        this.errors.password.push("Password is required.");
-      }
       if (email && password) {
         const body = {
           agency: 70,
           username: email,
           password: password,
         };
-        this.isLoading = true;
+        this.startLoader();
         await this.login(body);
-        console.log(
-          "tryGet",
-          this.tryGet(() => this.userData.userId)
-        );
         if (this.authErrors.length) {
           alert(this.authErrors);
         } else {
           await this.getCurrentUser(this.userData.userId);
-          if (this.authErrors.length) {
+          if (this.tryGet(() => this.authErrors.length)) {
             alert(this.authErrors);
           } else {
-            this.$router.push("/home");
-            this.isLoading = false;
+            await this.getCurrentAgency(this.userData.agencyId);
+            if (this.tryGet(() => this.agencyErrors.length)) {
+              alert(this.agencyErrors);
+            } else {
+              this.$router.push("/select-workspace");
+              this.stopLoader();
+            }
           }
         }
       }
     },
   },
   computed: {
-    ...mapGetters("auth", ["authErrors", "userData"]),
+    ...mapGetters("auth", ["authErrors", "userData", "agencyErrors"]),
   },
 });
 </script>
@@ -134,7 +117,7 @@ ion-content {
   font-family: "Quicksand", sans-serif;
 }
 .content-wrapper {
-  gap: 30px;
+  gap: 20px;
 }
 .content-wrapper > * {
   width: 100%;
@@ -158,5 +141,9 @@ ion-icon {
 }
 .input-fields input {
   padding-bottom: 0px !important;
+}
+.profile-pic {
+  height: 150px;
+  width: auto;
 }
 </style>

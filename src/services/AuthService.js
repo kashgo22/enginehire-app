@@ -18,7 +18,6 @@ export default {
   async login(loginInfo) {
     try {
       const { data } = await DataService.post("api-token-auth/?resource=login", loginInfo);
-      console.log('Response From Login API ===>', data)
       return Transformer.mapLoginData(data);
     } catch (e) {
       return errorResponse(e);
@@ -28,6 +27,14 @@ export default {
     try {
       const { data } = await DataService.get(`api/people/${userId}`);
       return Transformer.mapUserData(data);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  },
+  async getAgency(agencyId) {
+    try {
+      const { data } = await DataService.get(`api/agencies/${agencyId}`);
+      return Transformer.mapAgencyData(data);
     } catch (e) {
       return errorResponse(e);
     }

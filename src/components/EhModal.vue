@@ -1,5 +1,5 @@
 <template>
-  <ion-header class="flex items-center justify-between py-5">
+  <ion-header class="flex items-center justify-between py-16 bg-primary text-light">
     <slot name="header"> </slot>
   </ion-header>
   <ion-content class="ion-padding">
@@ -13,7 +13,7 @@
         <ion-col>
           <slot name="footer"></slot>
           <ion-button @click="handleCancel" class="rounded-full w-full">
-            Cancel
+            Close
           </ion-button>
         </ion-col>
       </ion-row>
@@ -33,14 +33,9 @@ export default defineComponent({
   created() {
     this.modalIsOpen = this.modelValue;
   },
-  data() {
-    return {
-      modalIsOpen: false,
-      startDate: new Date().toLocaleDateString(),
-      startTime: new Date().toLocaleTimeString(),
-      notes: "",
-    };
-  },
+  data: () => ({
+    modalIsOpen: false,
+  }),
   watch: {
     modelValue: {
       immediate: true,

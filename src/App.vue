@@ -1,5 +1,6 @@
 <template>
   <ion-app>
+    <ion-loading v-if="isLoading" :is-open="isLoading" message="Loading..." />
     <ion-router-outlet />
   </ion-app>
 </template>
@@ -16,14 +17,23 @@ export default defineComponent({
     IonRouterOutlet,
   },
   methods: {
-    ...mapActions("auth", ["getCurrentUser"]),
+    ...mapActions("auth", ["getCurrentUser", "getCurrentAgency"]),
   },
   computed: {
-    ...mapGetters("auth", ["isAuthenticated", "userId"]),
+    ...mapGetters("auth", ["isAuthenticated", "userId", "userData"]),
+    ...mapGetters("page", ["isLoading"]),
   },
   async created() {
-    if(this.tryGet(()=> this.isAuthenticated) && this.tryGet(()=> this.userId)){
-       await this.getCurrentUser(this.userId);
+    if (
+      this.tryGet(() => this.isAuthenticated) &&
+      this.tryGet(() => this.userId)
+    ) {
+      await this.getCurrentUser(this.userId);
+      // await this.getCurrentAgency(this.userData.agencyId);
+      // if (this.tryGet(() => this.agencyErrors.length)) {
+      //   alert(this.agencyErrors);
+      // }
+      
     }
   },
 });

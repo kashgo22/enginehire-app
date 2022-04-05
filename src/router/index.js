@@ -12,7 +12,7 @@ const ifNotAuthenticated = (to, from, next) => {
   if (!localStorage.getItem("eh-token")) {
     next();
   } else {
-    next({ name: "HomePage" });
+    next({ name: "SelectWorkspacePage" });
   }
 };
 
@@ -26,6 +26,12 @@ const routes = [
     name: "LoginPage",
     component: () => import("../views/Login.vue"),
     beforeEnter: ifNotAuthenticated,
+  },
+  {
+    path: "/select-workspace",
+    name: "SelectWorkspacePage",
+    component: () => import("../views/SelectWorkspace.vue"),
+    beforeEnter: ifAuthenticated,
   },
   {
     path: "/home",

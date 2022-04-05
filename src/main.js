@@ -4,7 +4,8 @@ import router from "./router";
 import store from "./store/index";
 import * as allIcons from "ionicons/icons";
 import tryGet from "./utils/try-get";
-// import { ValidationProvider, extend } from 'vee-validate';
+import {mapActions} from 'vuex'
+
 import {
   IonicVue,
   IonContent,
@@ -48,6 +49,7 @@ import {
 } from "@ionic/vue";
 
 import EhInput from "./components/UI/EhInput";
+import EhMainLayout from "./layouts/EhMainLayout.vue";
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -109,6 +111,7 @@ const globalComponents = {
   IonRouterOutlet,
   IonLoading,
   EhInput,
+  EhMainLayout
 };
 
 const app = createApp(App).use(IonicVue).use(router).use(store);
@@ -124,7 +127,7 @@ app.mixin({
     };
   },
   methods: {
-    // ...mapActions("page", ["startLoader", "stopLoader"]),
+    ...mapActions("page", ["startLoader", "stopLoader"]),
     getIcon(name) {
       return this.i[name];
     },

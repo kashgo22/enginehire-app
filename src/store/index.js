@@ -1,10 +1,12 @@
 import { createStore } from "vuex";
 import auth from "./modules/auth";
-import jobs from "./modules/jobs";
+import job from "./modules/job";
+import page from "./modules/page";
 
 export default createStore({
   modules: {
     auth,
-    jobs
+    job,
+    page
   },
 });

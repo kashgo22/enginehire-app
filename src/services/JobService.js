@@ -23,13 +23,20 @@ export default {
       return errorResponse(e);
     }
   },
-  async updateJob(jobId, jobInfo) {
+  async updateJob({jobId, body}) {
     try {
-      const { data } = await DataService.patch(`api/jobs/${jobId}`, jobInfo);
-      return Transformer.mapJobs(data);
+      const { data } = await DataService.patch(`api/jobs/${jobId}`, body);
+      return Transformer.success(data);
+    } catch (e) {
+      return errorResponse(e);
+    }
+  },
+  async postReview(body) {
+    try {
+      const { data } = await DataService.post('api/reviews/', body);
+      return Transformer.success(data);
     } catch (e) {
       return errorResponse(e);
     }
   },
 };
-// 

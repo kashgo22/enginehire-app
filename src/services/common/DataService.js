@@ -3,8 +3,6 @@ const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
 
-console.log("baseURL", process.env.VUE_APP_BASE_URL);
-
 instance.interceptors.request.use((request) => {
   const token = localStorage.getItem("eh-token");
   if (token) {

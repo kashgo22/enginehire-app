@@ -8,15 +8,21 @@ const state = () => ({
     data: null,
     errors: [],
   },
+  agency: {
+    data: null,
+    errors: [],
+  },
 });
 
 // getters
 const getters = {
   userData: (state) => state.user.data,
   userErrors: (state) => state.user.errors,
-  authErrors: (state) => state.auth.errors,
-  isAuthenticated: () => localStorage.getItem("eh-token"),
   userId: () => localStorage.getItem("eh-userId"),
+  agencyData: (state) => state.agency.data,
+  agencyErrors: (state) => state.agency.errors,
+  authErrors: (state) => state.auth.errors,
+  isAuthenticated: () => localStorage.getItem("eh-token") ? true : false,
 };
 
 // actions
@@ -38,9 +44,17 @@ const actions = {
     const { success, data, errors } = await AuthService.getUser(userId);
     if (success) {
       commit("setUserData", data); 
-      console.log("Auth Action Get Curent User Data ===>", data);
     } else {
       commit("setAuthError", errors);
+    }
+  },
+  async getCurrentAgency({ commit }, agencyId) {
+    commit("setAgencyStart");
+    const { success, data, errors } = await AuthService.getAgency(agencyId);
+    if (success) {
+      commit("setAgencyData", data); 
+    } else {
+      commit("setAgencyError", errors);
     }
   },
 };
@@ -61,6 +75,15 @@ const mutations = {
   },
   setUserError(state, errors) {
     state.user.errors = errors;
+  },
+  setAgencyStart(state) {
+    state.agency.errors = [];
+  },
+  setAgencyData(state, data) {
+    state.agency.data = data;
+  },
+  setAgencyError(state, errors) {
+    state.agency.errors = errors;
   },
 };
 

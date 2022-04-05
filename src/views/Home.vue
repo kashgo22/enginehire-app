@@ -4,7 +4,7 @@
       <ion-grid>
         <ion-row>
          <ion-col>
-            <ion-title  class="text-3xl font-semibold font-quicksand mt-16 text-center">Home</ion-title>
+            <ion-title class="text-3xl font-semibold font-quicksand mt-16 text-center">Home</ion-title>
           </ion-col>
         </ion-row>
       </ion-grid>
