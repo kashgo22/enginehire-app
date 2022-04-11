@@ -1,12 +1,7 @@
 <template>
   <ion-tab-bar color="primary" slot="bottom">
-    <ion-tab-button
-      v-for="item in items"
-      :key="item.to"
-      :tab="item.to"
-      :selected-tab="isRoute(item.to)"
-      @click="gotoPage(item.to)"
-    >
+    <ion-tab-button v-for="item in items" :key="item.to" :tab="item.to"
+      :selected-tab="isRoute(item.to)" @click="gotoPage(item.to)">
       <ion-label class="mt-2">{{ item.title }}</ion-label>
       <ion-icon :src="getIcon(item.icon)" />
     </ion-tab-button>
@@ -14,8 +9,12 @@
 </template>
 
 <script>
+import { IonIcon, IonTabBar, IonTabButton, IonLabel } from '@ionic/vue'
 export default {
   name: "EhBottomTabBar",
+  components: {
+    IonIcon, IonTabBar, IonTabButton, IonLabel
+  },
   data: () => ({
     items: [
       {
@@ -42,6 +41,9 @@ export default {
     gotoPage(to) {
       return this.$router.push(to);
     },
+    getIcon() {
+
+    },
   },
 };
 </script>
@@ -51,6 +53,7 @@ ion-tab-button[selected-tab="true"] {
   font-weight: bold;
   color: var(--ion-color-light);
 }
+
 /* ion-tab-bar {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;

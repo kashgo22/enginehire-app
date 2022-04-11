@@ -5,15 +5,16 @@
         <ion-row>
           <ion-col>
             <ion-title
-              class="text-3xl font-semibold font-quicksand mt-16 text-center"
-              >Profile</ion-title
-            >
+              class="text-3xl font-semibold font-quicksand mt-16 text-center">
+              Profile</ion-title>
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col class="flex flex-col items-center justify-center gap-10 mt-20">
+          <ion-col
+            class="flex flex-col items-center justify-center gap-10 mt-20">
             <ion-img class="profile-pic" :src="profilePic" alt="" />
-            <ion-title class="font-bold text-2xl font-quicksand">{{ userName }}</ion-title>
+            <ion-title class="font-bold text-2xl font-quicksand">{{ userName }}
+            </ion-title>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -30,24 +31,25 @@
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
 import EhMainLayout from "../layouts/EhMainLayout.vue";
+import { IonGrid, IonRow, IonCol, IonTitle, IonImg, IonButton } from '@ionic/vue'
 
 export default defineComponent({
   name: "ProfilePage",
   components: {
-    EhMainLayout,
+    EhMainLayout, IonGrid, IonRow, IonCol, IonTitle, IonImg, IonButton
   },
   computed: {
     ...mapGetters("auth", ["userData"]),
     profilePic() {
-      return this.tryGet(() => this.userData.profilePic);
+      return this.userData?.profilePic;
     },
     userName() {
       return (
-        `${this.tryGet(() => this.userData.firstName)} ${this.tryGet(() => this.userData.lastName)}`
+        `${this.userData?.firstName} ${this.userData?.lastName}`
       );
     },
     userEmail() {
-      return this.tryGet(() => this.userData.email);
+      return this.userData?.email;
     },
   },
   methods: {

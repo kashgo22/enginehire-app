@@ -1,10 +1,8 @@
 <template>
   <eh-card class="job-card">
     <template #header>
-      <ion-card-title
-        >{{ job.posterName }} -
-        {{ addTimeToDate(job.date).toDateString() }}</ion-card-title
-      >
+      <ion-card-title>{{ job.posterName }} -
+        {{ addTimeToDate(job.date).toDateString() }}</ion-card-title>
     </template>
     <template #content>
       <ion-card-subtitle class="text-base font-bold font-quicksand">
@@ -44,8 +42,7 @@
         </ion-text>
       </ion-card-subtitle>
       <ion-card-subtitle
-        class="text-base font-bold flex items-center gap-7 font-quicksand"
-      >
+        class="text-base font-bold flex items-center gap-7 font-quicksand">
         Current Status:
         <ion-badge class="font-primary px-7" color="success">
           {{ job.status }}
@@ -58,31 +55,20 @@
           <ion-button @click="jobDetailsModal" class="rounded-full w-full">
             View Job Details
           </ion-button>
-          <ion-button
-              v-if="isClockIn(job)"
-              class="rounded-full w-full"
-              @click="clockInModal"
-            >
-              Clock In
-            </ion-button>
-          <ion-button
-            v-if="
-              job.status == 'In Progress' ||
-              (job.actualStartTime && !job.actualEndTime)
-            "
-            class="rounded-full w-full"
-            @click="clockOutModal"
-          >
+          <ion-button v-if="isClockIn(job)" class="rounded-full w-full"
+            @click="clockInModal">
+            Clock In
+          </ion-button>
+          <ion-button v-if="
+            job.status == 'In Progress' ||
+            (job.actualStartTime && !job.actualEndTime)
+          " class="rounded-full w-full" @click="clockOutModal">
             Clock Out
           </ion-button>
-          <ion-button
-            v-if="
-              job.candidateReviewed &&
-              dateInDjangoFormat(job.date) <= todayDjangoFormat
-            "
-            class="rounded-full w-full"
-            @click="reviewModal"
-          >
+          <ion-button v-if="
+            job.candidateReviewed &&
+            dateInDjangoFormat(job.date) <= todayDjangoFormat
+          " class="rounded-full w-full" @click="reviewModal">
             Leave a Review
           </ion-button>
         </ion-col>
@@ -92,7 +78,8 @@
   <ion-modal :is-open="showClockInModal">
     <eh-modal v-model="showClockInModal">
       <template #header>
-        <ion-title v-if="tryGet(() => agencyData.manualClocking)">When did you start?</ion-title>
+        <ion-title v-if="agencyData?.manualClocking">When did you start?
+        </ion-title>
         <ion-title v-else>Ready to Begin?</ion-title>
       </template>
       <template #body>
@@ -108,18 +95,13 @@
         <ion-text class="text-base font-bold flex items-center gap-7">
           Status: <ion-text>{{ job.status }}</ion-text>
         </ion-text>
-        <eh-textarea
-          v-model="comments"
-          class="text-primary text-lg pb-0"
-          label="Any Notes?"
-        >
+        <eh-textarea v-model="comments" class="text-primary text-lg pb-0"
+          label="Any Notes?">
         </eh-textarea>
       </template>
       <template #footer>
-        <ion-button
-          class="rounded-full w-full mt-40"
-          @click="handleClockIn(job)"
-        >
+        <ion-button class="rounded-full w-full mt-40"
+          @click="handleClockIn(job)">
           Clock In
         </ion-button>
       </template>
@@ -128,7 +110,8 @@
   <ion-modal :is-open="showClockOutModal">
     <eh-modal v-model="showClockOutModal">
       <template #header>
-        <ion-title v-if="tryGet(() => agencyData.manualClocking)">When did you end?</ion-title>
+        <ion-title v-if="agencyData?.manualClocking">When did you end?
+        </ion-title>
         <ion-title v-else>Finished?</ion-title>
       </template>
       <template #body>
@@ -144,18 +127,13 @@
         <ion-text class="text-base font-bold flex items-center gap-7">
           Status: <ion-text>{{ job.status }}</ion-text>
         </ion-text>
-        <eh-textarea
-          v-model="comments"
-          class="text-primary text-lg pb-0"
-          label="Any Notes?"
-        >
+        <eh-textarea v-model="comments" class="text-primary text-lg pb-0"
+          label="Any Notes?">
         </eh-textarea>
       </template>
       <template #footer>
-        <ion-button
-          class="rounded-full w-full mt-40"
-          @click="handleClockOut(job)"
-        >
+        <ion-button class="rounded-full w-full mt-40"
+          @click="handleClockOut(job)">
           Clock Out
         </ion-button>
       </template>
@@ -189,19 +167,13 @@
             <ion-select-option value="5">5</ion-select-option>
           </ion-select>
         </ion-item>
-        <eh-textarea
-          v-model="comments"
-          class="text-primary text-lg pb-0"
-          label="Comments"
-        >
+        <eh-textarea v-model="comments" class="text-primary text-lg pb-0"
+          label="Comments">
         </eh-textarea>
       </template>
       <template #footer>
-        <ion-button
-          class="rounded-full w-full mt-40"
-          @click="handleSubmitReview(job)"
-          :disabled="isDisabled"
-        >
+        <ion-button class="rounded-full w-full mt-40"
+          @click="handleSubmitReview(job)" :disabled="isDisabled">
           Submit
         </ion-button>
       </template>
@@ -216,19 +188,14 @@
         <ion-text class="text-base font-bold flex items-center gap-7">
           Address: <ion-text class="font-normal">{{ job.address1 }}</ion-text>
         </ion-text>
-        <ion-text
-          v-if="job.city || job.provincestate || job.postal_code"
-          class="text-base font-bold flex items-center gap-7"
-        >
+        <ion-text v-if="job.city || job.provincestate || job.postal_code"
+          class="text-base font-bold flex items-center gap-7">
           Location:
           <ion-text class="font-normal">
             <ion-text>{{ job.city }}</ion-text>
-            <ion-text
-              v-if="
-                (job.city && job.provinceState) || (job.city && job.postalCode)
-              "
-              >, </ion-text
-            >
+            <ion-text v-if="
+              (job.city && job.provinceState) || (job.city && job.postalCode)
+            ">, </ion-text>
             <ion-text>{{ job.provinceState }} </ion-text>
             <ion-text v-if="job.provinceState && job.postalCode">, </ion-text>
             <ion-text>{{ job.postalCode }}</ion-text>
@@ -268,22 +235,17 @@
 
 <script>
 import { defineComponent } from "vue";
-import { IonModal, IonSelect, IonSelectOption } from "@ionic/vue";
 import EhModal from "./EhModal.vue";
 import EhTextarea from "./UI/EhTextarea.vue";
 import EhCard from "./UI/EhCard.vue";
 import { mapActions, mapGetters } from "vuex";
+import { IonCardTitle, IonCardSubtitle, IonText, IonRow, IonCol, IonButton, IonModal, IonSelect, IonSelectOption, IonTitle, IonBadge, IonLabel, IonItem } from '@ionic/vue'
 
 export default defineComponent({
   components: {
-    IonModal,
-    EhModal,
-    EhTextarea,
-    IonSelect,
-    IonSelectOption,
-    EhCard,
+    IonModal, EhModal, EhTextarea, IonSelect, IonSelectOption, EhCard, IonCardTitle, IonCardSubtitle, IonText, IonRow, IonCol, IonButton, IonTitle, IonBadge, IonLabel, IonItem
   },
-  data: () => ({ 
+  data: () => ({
     showClockInModal: false,
     showClockOutModal: false,
     showReviewModal: false,
@@ -296,7 +258,7 @@ export default defineComponent({
   props: {
     job: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   watch: {
@@ -316,9 +278,9 @@ export default defineComponent({
   methods: {
     ...mapActions("job", ["getJobsList", "updateJob", "addReview"]),
     isClockIn(job) {
-      if((this.addTimeToDate(job.date).toDateString() == new Date().toDateString() ||
+      if ((this.addTimeToDate(job.date).toDateString() == new Date().toDateString() ||
         (this.dateInDjangoFormat(new Date()) >= this.dateInDjangoFormat(new Date(job.date)) &&
-        this.tryGet(() => this.agencyData.manualClocking))) && (job.status == 'Assigned' || !job.actualStartTime)){
+          this.agencyData?.manualClockin)) && (job.status == 'Assigned' || !job.actualStartTime)) {
         return true;
       }
       return false
@@ -355,7 +317,7 @@ export default defineComponent({
       };
       this.startLoader();
       await this.updateJob(model);
-      if (this.tryGet(() => this.jobsErrors.length)) {
+      if (this.jobsErrors?.length) {
         alert(this.jobsErrors);
       } else {
         const body = {
@@ -363,7 +325,7 @@ export default defineComponent({
           userId: currentJob.fillerId,
         };
         await this.getJobsList(body);
-        if (this.tryGet(() => this.jobsErrors.length)) {
+        if (this.jobsErrors?.length) {
           alert(this.jobsErrors);
         } else {
           this.stopLoader();
@@ -389,7 +351,7 @@ export default defineComponent({
       };
       this.startLoader();
       await this.updateJob(model);
-      if (this.tryGet(() => this.jobsErrors.length)) {
+      if (this.jobsErrors?.length) {
         alert(this.jobsErrors);
       } else {
         const body = {
@@ -397,7 +359,7 @@ export default defineComponent({
           userId: currentJob.fillerId,
         };
         await this.getJobsList(body);
-        if (this.tryGet(() => this.jobsErrors.length)) {
+        if (this.jobsErrors?.length) {
           alert(this.jobsErrors);
         } else {
           this.stopLoader();
@@ -422,7 +384,7 @@ export default defineComponent({
       };
       this.stopLoader();
       await this.addReview(body);
-      if (this.tryGet(() => this.jobReviewsErrors.length)) {
+      if (this.jobReviewsErrors?.length) {
         alert(this.jobReviewsErrors);
       } else {
         const model = {
@@ -432,7 +394,7 @@ export default defineComponent({
           },
         };
         await this.updateJob(model);
-        if (this.tryGet(() => this.jobsErrors.length)) {
+        if (this.jobsErrors?.length) {
           alert(this.jobsErrors);
         } else {
           const body = {
@@ -440,7 +402,7 @@ export default defineComponent({
             userId: currentJob.fillerId,
           };
           await this.getJobsList(body);
-          if (this.tryGet(() => this.jobsErrors.length)) {
+          if (this.jobsErrors?.length) {
             alert(this.jobsErrors);
           } else {
             this.stopLoader();
@@ -664,6 +626,7 @@ export default defineComponent({
 .job-card .card-content-md {
   padding-bottom: 0px;
 }
+
 .job-card {
   margin-bottom: 15px;
   border-radius: 24px;

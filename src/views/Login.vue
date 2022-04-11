@@ -8,37 +8,21 @@
             <ion-img class="profile-pic" :src="logo" alt="" />
           </ion-col>
           <ion-col size="12" class="flex flex-col items-center">
-            <ion-icon
-              class="fs-100"
-              color="light"
-              name="person-circle-outline"
-            />
-            <ion-text
-              class="section-heading text-center text-3xl"
-              color="light"
-            >
+            <ion-icon class="fs-100" color="light"
+              name="person-circle-outline" />
+            <ion-text class="section-heading text-center text-3xl"
+              color="light">
               Login
             </ion-text>
           </ion-col>
           <ion-col size="12" class="input-fields flex flex-col mt-22">
-            <eh-input
-              v-model="form.email"
-              class="text-light text-lg pb-0"
-              type="text"
-              label="Email"
-            />
-            <eh-input
-              v-model="form.password"
-              class="text-light text-lg pb-0"
-              type="password"
-              label="Password"
-            />
-            <ion-button
-              type="submit"
-              color="light"
+            <eh-input v-model="form.email" class="text-light text-lg pb-0"
+              type="text" label="Email" />
+            <eh-input v-model="form.password" class="text-light text-lg pb-0"
+              type="password" label="Password" />
+            <ion-button type="submit" color="light"
               class="text-primary text-lg shadow-lg rounded-full my-20"
-              @click="handleSubmit"
-            >
+              @click="handleSubmit">
               Login
             </ion-button>
           </ion-col>
@@ -54,6 +38,8 @@ import { addIcons } from "ionicons";
 import { personCircleOutline } from "ionicons/icons";
 import { mapActions, mapGetters } from "vuex";
 import EhLogo from "../../public/assets/images/enginehire-logo.png";
+import { IonLoading, IonGrid, IonRow, IonCol, IonImg, IonIcon, IonText, IonButton } from '@ionic/vue'
+import EhInput from "../components/UI/EhInput.vue";
 
 export default defineComponent({
   name: "LoginPage",
@@ -73,6 +59,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("auth", ["login", "getCurrentUser", "getCurrentAgency"]),
+    ...mapActions("page", ["startLoader", "stopLoader"]),
     async handleSubmit() {
       const { email, password } = this.form;
       if (email && password) {
@@ -87,11 +74,11 @@ export default defineComponent({
           alert(this.authErrors);
         } else {
           await this.getCurrentUser(this.userData.userId);
-          if (this.tryGet(() => this.authErrors.length)) {
+          if (this.authErrors?.length) {
             alert(this.authErrors);
           } else {
             await this.getCurrentAgency(this.userData.agencyId);
-            if (this.tryGet(() => this.agencyErrors.length)) {
+            if (this.agencyErrors?.length) {
               alert(this.agencyErrors);
             } else {
               this.$router.push("/select-workspace");
@@ -104,7 +91,11 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters("auth", ["authErrors", "userData", "agencyErrors"]),
+    ...mapGetters("page", ["isLoading"]),
   },
+  components: {
+    IonLoading, IonGrid, IonRow, IonCol, IonImg, IonIcon, IonText, IonButton, EhInput
+  }
 });
 </script>
 
@@ -112,36 +103,46 @@ export default defineComponent({
 ion-content {
   padding: 20px;
 }
+
 .section-heading {
   text-transform: uppercase;
   font-family: "Quicksand", sans-serif;
 }
+
 .content-wrapper {
   gap: 20px;
 }
-.content-wrapper > * {
+
+.content-wrapper>* {
   width: 100%;
 }
 
 ion-icon {
   color: blue;
 }
+
 .input-fields {
   gap: 10px;
 }
+
 .input-fields ion-item {
-  --border-color: white; /* default underline color */
-  --highlight-color-invalid: red; /* invalid underline color */
-  --highlight-color-valid: green; /* valid underline color */
+  --border-color: white;
+  /* default underline color */
+  --highlight-color-invalid: red;
+  /* invalid underline color */
+  --highlight-color-valid: green;
+  /* valid underline color */
 }
+
 .input-fields ion-item.item-has-focus {
-  --highlight-background: var(
-    --ion-color-secondary
-  ); /* focused underline color */
+  --highlight-background: var(--ion-color-secondary);
+  /* focused underline color */
 }
+
 .input-fields input {
   padding-bottom: 0px !important;
 }
+
 .profile-pic {
   height: 150px;
   width: auto;

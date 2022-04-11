@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { IonApp, IonRouterOutlet } from "@ionic/vue";
+import { IonApp, IonRouterOutlet, IonLoading } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
 
@@ -15,6 +15,7 @@ export default defineComponent({
   components: {
     IonApp,
     IonRouterOutlet,
+    IonLoading
   },
   methods: {
     ...mapActions("auth", ["getCurrentUser", "getCurrentAgency"]),
@@ -25,15 +26,15 @@ export default defineComponent({
   },
   async created() {
     if (
-      this.tryGet(() => this.isAuthenticated) &&
-      this.tryGet(() => this.userId)
+      this.isAuthenticated &&
+      this.userId
     ) {
       await this.getCurrentUser(this.userId);
-      // await this.getCurrentAgency(this.userData.agencyId);
-      // if (this.tryGet(() => this.agencyErrors.length)) {
+      // await this.getCurrentAgency(this.userData?.agencyId);
+      // if (this.agencyErrors?.length) {
       //   alert(this.agencyErrors);
       // }
-      
+
     }
   },
 });

@@ -14,6 +14,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import { IonCard, IonCardHeader, IonCardContent, IonGrid } from '@ionic/vue'
 
 export default defineComponent({
   name: "EhCard",
@@ -28,6 +29,9 @@ export default defineComponent({
       return !!this.$slots.header
     },
   },
+  components: {
+    IonCard, IonCardHeader, IonCardContent, IonGrid
+  }
 });
 </script>
 
@@ -35,6 +39,7 @@ export default defineComponent({
 .job-card .card-content-md {
   padding-bottom: 0px;
 }
+
 .job-card {
   margin-bottom: 15px;
   border-radius: 24px;

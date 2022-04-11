@@ -5,19 +5,14 @@
         <ion-row>
           <ion-col>
             <ion-title
-              class="text-3xl font-semibold font-quicksand mt-16 text-center"
-              >My Jobs</ion-title
-            >
+              class="text-3xl font-semibold font-quicksand mt-16 text-center">My
+              Jobs</ion-title>
           </ion-col>
           <ion-col v-if="errors.length" size="12">
             <p>Error Loading Jobs</p>
           </ion-col>
           <ion-col v-else size="12">
-            <job-card
-              v-for="job in jobsData"
-              :key="job.id"
-              :job="job"
-            />
+            <job-card v-for="job in jobsData" :key="job.id" :job="job" />
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -30,12 +25,12 @@ import { defineComponent } from "vue";
 import JobCard from "../components/JobCard.vue";
 import { mapGetters, mapActions } from "vuex";
 import EhMainLayout from "../layouts/EhMainLayout.vue";
+import { IonGrid, IonRow, IonCol, IonTitle } from '@ionic/vue'
 
 export default defineComponent({
   name: "MyJobsPage",
   components: {
-    EhMainLayout,
-    JobCard,
+    EhMainLayout, JobCard, IonGrid, IonRow, IonCol, IonTitle
   },
   data: () => ({
     isLoading: false,
@@ -46,7 +41,7 @@ export default defineComponent({
       deep: true,
       immediate: true,
       async handler(val) {
-        if (this.tryGet(() => val.userId) && this.tryGet(() => val.agencyId)) {
+        if (val?.userId && val?.agencyId) {
           this.isLoading = true;
           const userInfo = {
             userId: val.userId,
