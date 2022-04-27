@@ -16,6 +16,14 @@ const ifNotAuthenticated = (to, from, next) => {
   }
 };
 
+const ifHaveAgencies = (to, from, next) => {
+  if (localStorage.getItem("eh-agencylist")) {
+    next();
+  } else {
+    next({ name: "LoginPage" });
+  }
+};
+
 const routes = [
   {
     path: "/",
@@ -31,7 +39,7 @@ const routes = [
     path: "/select-workspace",
     name: "SelectWorkspacePage",
     component: () => import("../views/SelectWorkspace.vue"),
-    beforeEnter: ifAuthenticated,
+    beforeEnter: ifHaveAgencies,
   },
   {
     path: "/home",

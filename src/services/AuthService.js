@@ -17,7 +17,7 @@ function errorResponse(e) {
 export default {
   async login(loginInfo) {
     try {
-      const { data } = await DataService.post("api-token-auth/?resource=login", loginInfo);
+      const { data } = await DataService.post("v1/api-token-auth/", loginInfo);
       return Transformer.mapLoginData(data);
     } catch (e) {
       return errorResponse(e);

@@ -17,13 +17,12 @@
         </ion-row>
         <ion-row>
           <ion-col class="flex flex-col gap-2">
-            <eh-card v-for="agency in 10" :key="agency" class="workspace-card"
-              :class="{ 'selected-card': selectedAgency == agency }"
-              @click="selectWorkspace(agency)">
+            <eh-card v-for="agency in userAgencies" :key="agency.agency_id"
+              class="workspace-card" @click="selectWorkspace(agency.agency_id)">
               <template #content>
                 <ion-title color="light"
                   class="text-2xl font-semibold font-quicksand text-center">
-                  Agency {{ agency }}
+                  {{ agency.agency_name }}
                 </ion-title>
               </template>
             </eh-card>
@@ -37,7 +36,7 @@
 <script>
 import { defineComponent } from "vue";
 import EhCard from "../components/UI/EhCard.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import EhMainLayout from "../layouts/EhMainLayout.vue";
 import { IonGrid, IonRow, IonCol, IonTitle } from '@ionic/vue'
 
@@ -46,20 +45,14 @@ export default defineComponent({
   components: {
     EhCard, EhMainLayout, IonRow, IonGrid, IonCol, IonTitle,
   },
-  data() {
-    return {
-      selectedAgency: null,
-    };
-  },
+  data: () => ({
+  }),
   computed: {
-    ...mapGetters("job", ["5", "jobsErrors", "jobReviewsErrors"]),
-    ...mapGetters("auth", ["agencyData", "agencyErrors"]),
+    ...mapGetters("auth", ["userAgencies"]),
   },
   methods: {
-    ...mapActions("job", ["getJobsList", "updateJob", "addReview"]),
-    selectWorkspace(jobId) {
-      this.selectedAgency = jobId;
-      this.$router.push('/home')
+    selectWorkspace(agencyId) {
+      console.log('agencyId', agencyId);
     },
   },
 });

@@ -48,15 +48,13 @@ export default defineComponent({
       "person-circle-outline": personCircleOutline,
     });
   },
-  data() {
-    return {
-      form: {
-        email: "",
-        password: "",
-      },
-      logo: EhLogo,
-    };
-  },
+  data: () => ({
+    form: {
+      email: "",
+      password: "",
+    },
+    logo: EhLogo,
+  }),
   methods: {
     ...mapActions("auth", ["login", "getCurrentUser", "getCurrentAgency"]),
     ...mapActions("page", ["startLoader", "stopLoader"]),
@@ -64,28 +62,29 @@ export default defineComponent({
       const { email, password } = this.form;
       if (email && password) {
         const body = {
-          agency: 70,
+          email,
           username: email,
           password: password,
         };
         this.startLoader();
         await this.login(body);
         if (this.authErrors.length) {
-          alert(this.authErrors);
-        } else {
-          await this.getCurrentUser(this.userData.userId);
-          if (this.authErrors?.length) {
-            alert(this.authErrors);
-          } else {
-            await this.getCurrentAgency(this.userData.agencyId);
-            if (this.agencyErrors?.length) {
-              alert(this.agencyErrors);
-            } else {
-              this.$router.push("/select-workspace");
-              this.stopLoader();
-            }
-          }
+          console.log(this.authErrors);
+          return;
         }
+        this.$router.push("/select-workspace");
+        this.stopLoader();
+
+        // await this.getCurrentUser(this.userData.userId);
+        // if (this.authErrors?.length) {
+        //   alert(this.authErrors);
+        //   return;
+        // }
+        // await this.getCurrentAgency(this.userData.agencyId);
+        // if (this.agencyErrors?.length) {
+        //   alert(this.agencyErrors);
+        //   return;
+        // }
       }
     },
   },

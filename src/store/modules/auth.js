@@ -17,6 +17,7 @@ const state = () => ({
 // getters
 const getters = {
   userData: (state) => state.user.data,
+  userAgencies: () => JSON.parse(localStorage.getItem("eh-agencylist")),
   userErrors: (state) => state.user.errors,
   userId: () => localStorage.getItem("eh-userId"),
   agencyData: (state) => state.agency.data,
@@ -31,9 +32,10 @@ const actions = {
     commit("setAuthStart");
     const { success, data, errors } = await AuthService.login(loginInfo);
     if (success) {
-      localStorage.setItem("eh-token", data.token);
-      localStorage.setItem("eh-userId", data.userId);
-      localStorage.setItem("eh-agencyId", data.agencyId);
+      localStorage.setItem("eh-agencylist", JSON.stringify(data.agency_list));
+      // localStorage.setItem("eh-userId", data.userId);
+      // localStorage.setItem("eh-agencyId", data.agencyId);
+      console.log('data', data);
       commit("setUserData", data); 
     } else {
       commit("setAuthError", errors);
