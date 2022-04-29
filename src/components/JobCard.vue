@@ -1,8 +1,10 @@
 <template>
   <eh-card class="job-card">
     <template #header>
-      <ion-card-title>{{ job.posterName }} -
-        {{ addTimeToDate(job.date).toDateString() }}</ion-card-title>
+      <ion-card-title>
+        {{ job.posterName }}
+        <span v-if="job.date">{{ new Date(addTimeToDate(job.date)).toDateString() }}</span>  
+        </ion-card-title>
     </template>
     <template #content>
       <ion-card-subtitle class="text-base font-bold font-quicksand">
@@ -277,10 +279,14 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("job", ["getJobsList", "updateJob", "addReview"]),
+    ...mapActions("page", ["startLoader", "stopLoader"]),
     isClockIn(job) {
-      if ((this.addTimeToDate(job.date).toDateString() == new Date().toDateString() ||
+      if (job.date && 
+        (new Date(this.addTimeToDate(job.date).toDateString()) == new Date().toDateString() ||
         (this.dateInDjangoFormat(new Date()) >= this.dateInDjangoFormat(new Date(job.date)) &&
-          this.agencyData?.manualClockin)) && (job.status == 'Assigned' || !job.actualStartTime)) {
+        this.agencyData?.manualClocking)) && 
+        (job.status == 'Assigned' || !job.actualStartTime)
+      ) {
         return true;
       }
       return false

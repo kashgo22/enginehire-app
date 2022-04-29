@@ -23,12 +23,13 @@
 
 <script>
 import { defineComponent } from "vue";
+import { IonHeader, IonRow, IonCol, IonGrid, IonButton } from "@ionic/vue";
 
 export default defineComponent({
   name: "EhModal",
   props: {
     title: { type: String, default: "" },
-    modelValue: { type: String },
+    modelValue: { type: Boolean },
   },
   created() {
     this.modalIsOpen = this.modelValue;
@@ -49,6 +50,9 @@ export default defineComponent({
       this.modalIsOpen = false;
       this.$emit("update:modelValue", this.modalIsOpen);
     },
+  },
+  components: {
+    IonHeader, IonRow, IonCol, IonGrid, IonButton
   },
 });
 </script>

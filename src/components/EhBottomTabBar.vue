@@ -10,11 +10,14 @@
 
 <script>
 import { IonIcon, IonTabBar, IonTabButton, IonLabel } from '@ionic/vue'
+import registerIcons from '../mixins/registerIcons'
+
 export default {
   name: "EhBottomTabBar",
   components: {
     IonIcon, IonTabBar, IonTabButton, IonLabel
   },
+  mixins: [registerIcons],
   data: () => ({
     items: [
       {
@@ -40,10 +43,7 @@ export default {
     },
     gotoPage(to) {
       return this.$router.push(to);
-    },
-    getIcon() {
-
-    },
+    }
   },
 };
 </script>

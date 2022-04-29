@@ -33,7 +33,6 @@ export default defineComponent({
     EhMainLayout, JobCard, IonGrid, IonRow, IonCol, IonTitle
   },
   data: () => ({
-    isLoading: false,
     errors: [],
   }),
   watch: {
@@ -42,19 +41,21 @@ export default defineComponent({
       immediate: true,
       async handler(val) {
         if (val?.userId && val?.agencyId) {
-          this.isLoading = true;
           const userInfo = {
             userId: val.userId,
             agencyId: val.agencyId,
           };
           await this.getJobsList(userInfo);
-          this.isLoading = false;
           if (this.jobsErrors.length) {
             this.errors = this.jobsErrors;
           }
+          this.stopLoader();
         }
       },
     },
+  },
+  created() {
+    this.startLoader();
   },
   computed: {
     ...mapGetters("job", ["jobsData", "jobsErrors"]),
@@ -62,6 +63,7 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("job", ["getJobsList"]),
+    ...mapActions("page", ["startLoader", "stopLoader"]),
   },
 });
 </script>

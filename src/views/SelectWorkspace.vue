@@ -1,18 +1,29 @@
 <template>
   <eh-main-layout :showBottomTabBar="false">
     <template #content>
+      <ion-alert
+      :is-open="isOpenRef"
+      :header="alert.header"
+      :sub-header="alert.subHeader"
+      :message="alert.message"
+      css-class="my-custom-class"
+      :buttons="buttons"
+      @didDismiss="logOut"
+    >
+    </ion-alert>
       <ion-grid class="">
         <ion-row>
           <ion-col>
             <ion-title
               class="text-3xl font-semibold font-quicksand mt-16 text-center">
-              Workspace
+              Workspace 
             </ion-title>
           </ion-col>
           <ion-col>
             <ion-title
               class="text-base font-semibold font-quicksand mt-16 text-center">
-              Please select your Workspace</ion-title>
+              Please select your Workspace
+              </ion-title>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -34,25 +45,59 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import EhCard from "../components/UI/EhCard.vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import EhMainLayout from "../layouts/EhMainLayout.vue";
-import { IonGrid, IonRow, IonCol, IonTitle } from '@ionic/vue'
+import { IonGrid, IonRow, IonCol, IonTitle, IonAlert } from '@ionic/vue';
 
 export default defineComponent({
   name: 'SelectWorkspacePage',
   components: {
-    EhCard, EhMainLayout, IonRow, IonGrid, IonCol, IonTitle,
+    EhCard, EhMainLayout, IonRow, IonGrid, IonCol, IonTitle, IonAlert
   },
   data: () => ({
+    alert: {
+      header: '',
+      subHeader: '',
+      message: ''
+    }
   }),
   computed: {
-    ...mapGetters("auth", ["userAgencies"]),
+    ...mapGetters("auth", ["userAgencies", "userLoginInfo", "userId", "userData"]),
+  },
+  setup() {
+    const isOpenRef = ref(false);
+    const setOpen = state => isOpenRef.value = state;
+    const buttons = ['Ok'];
+    return { buttons, isOpenRef, setOpen }
   },
   methods: {
-    selectWorkspace(agencyId) {
-      console.log('agencyId', agencyId);
+    ...mapActions("auth", ["generateToken", "getCurrentAgency","getCurrentUser"]),
+    ...mapActions("page", ["startLoader", "stopLoader"]),
+    logOut(){
+      localStorage.removeItem("eh-token");
+      setTimeout(() => {
+        this.$router.push("/login");
+      }, 500);
+    },
+    async selectWorkspace(agencyId) {
+      this.startLoader();
+      await this.generateToken({
+        ...this.userLoginInfo,
+        agency: agencyId
+      });
+      await this.getCurrentAgency(agencyId)
+      await this.getCurrentUser(this.userId)
+      this.stopLoader();
+      if(!this.userData.isCandidate){
+        this.setOpen(true);
+        this.alert.header = 'Invalid Login'
+        this.alert.message = 'Currently, App only supports "Candidate" login.'
+        this.alert.message = 'Please use a Candidate account to login.'
+        return
+      }
+      this.$router.push("/home");
     },
   },
 });

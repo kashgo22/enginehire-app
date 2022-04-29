@@ -4,7 +4,11 @@ const state = () => ({
   auth: {
     errors: [],
   },
+  token: {
+    errors: [],
+  },
   user: {
+    loginInfo: null,
     data: null,
     errors: [],
   },
@@ -16,6 +20,7 @@ const state = () => ({
 
 // getters
 const getters = {
+  userLoginInfo: (state) => state.user.loginInfo,
   userData: (state) => state.user.data,
   userAgencies: () => JSON.parse(localStorage.getItem("eh-agencylist")),
   userErrors: (state) => state.user.errors,
@@ -28,15 +33,25 @@ const getters = {
 
 // actions
 const actions = {
+  async setUser({ commit }, loginInfo) {
+    commit("setUserLoginInfo", loginInfo);
+  },
   async login({ commit }, loginInfo) {
     commit("setAuthStart");
     const { success, data, errors } = await AuthService.login(loginInfo);
     if (success) {
       localStorage.setItem("eh-agencylist", JSON.stringify(data.agency_list));
-      // localStorage.setItem("eh-userId", data.userId);
-      // localStorage.setItem("eh-agencyId", data.agencyId);
-      console.log('data', data);
       commit("setUserData", data); 
+    } else {
+      commit("setAuthError", errors);
+    }
+  },
+  async generateToken({ commit }, userInfo) {
+    commit("setTokenStart");
+    const { success, data, errors } = await AuthService.login(userInfo);
+    if (success) {
+      localStorage.setItem("eh-token", data.token);
+      localStorage.setItem("eh-userId", data.userId);
     } else {
       commit("setAuthError", errors);
     }
@@ -63,11 +78,20 @@ const actions = {
 
 // mutations
 const mutations = {
+  setTokenStart(state) {
+    state.token.errors = [];
+  },
+  setTokenError(state, errors) {
+    state.token.errors = errors;
+  },
   setAuthStart(state) {
     state.auth.errors = [];
   },
   setAuthError(state, errors) {
     state.auth.errors = errors;
+  },
+  setUserLoginInfo(state, loginInfo) {
+    state.user.loginInfo = loginInfo;
   },
   setUserStart(state) {
     state.user.errors = [];

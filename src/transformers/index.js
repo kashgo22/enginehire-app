@@ -34,6 +34,7 @@ function mapUserData(user) {
       language: user?.language,
       agencyId: user?.agency_id,
       agencyOwner: user?.agency_owner,
+      isCandidate: user?.is_candidate
     },
   };
 }
@@ -84,27 +85,10 @@ function mapJobs(jobs) {
     ),
   };
 }
-// function mapReviews(reviews) {
-//   return {
-//     success: true,
-//     errors: null,
-//     data: reviews.map(review => ({
-//       jobId: review.job,
-//       approvedReview: review.approved_review,
-//       rating: review.rating,
-//       reviewerId: review.reviewer,
-//       review: review.text,
-//       recipientId: review.recipient
-//     })
-//     ),
-//   };
-// }
-
 export default {
   success,
   mapLoginData,
   mapUserData,
   mapJobs,
-  mapAgencyData, 
-  // mapReviews
+  mapAgencyData
 };

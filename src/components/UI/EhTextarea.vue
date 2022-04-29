@@ -18,11 +18,9 @@
 
 <script>
 import { defineComponent } from "vue";
-import { IonTextarea } from "@ionic/vue";
-
+import { IonNote, IonLabel, IonItem, IonTextarea } from "@ionic/vue";
 export default defineComponent({
   name: "EhTextarea",
-  components: { IonTextarea },
   props: {
     label: {
       type: String,
@@ -62,6 +60,9 @@ export default defineComponent({
     inputHandler(event) {
       this.$emit("update:modelValue", event.target.value);
     },
+  },
+  components: {
+    IonNote, IonLabel, IonItem, IonTextarea
   },
 });
 </script>

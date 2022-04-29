@@ -56,7 +56,7 @@ export default defineComponent({
     logo: EhLogo,
   }),
   methods: {
-    ...mapActions("auth", ["login", "getCurrentUser", "getCurrentAgency"]),
+    ...mapActions("auth", ["login", "getCurrentUser", "getCurrentAgency", "setUser"]),
     ...mapActions("page", ["startLoader", "stopLoader"]),
     async handleSubmit() {
       const { email, password } = this.form;
@@ -68,23 +68,13 @@ export default defineComponent({
         };
         this.startLoader();
         await this.login(body);
+        this.setUser(body);
+        this.stopLoader();
         if (this.authErrors.length) {
-          console.log(this.authErrors);
+          // console.log(this.authErrors);
           return;
         }
         this.$router.push("/select-workspace");
-        this.stopLoader();
-
-        // await this.getCurrentUser(this.userData.userId);
-        // if (this.authErrors?.length) {
-        //   alert(this.authErrors);
-        //   return;
-        // }
-        // await this.getCurrentAgency(this.userData.agencyId);
-        // if (this.agencyErrors?.length) {
-        //   alert(this.agencyErrors);
-        //   return;
-        // }
       }
     },
   },

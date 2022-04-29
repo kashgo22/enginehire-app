@@ -12,15 +12,7 @@ const ifNotAuthenticated = (to, from, next) => {
   if (!localStorage.getItem("eh-token")) {
     next();
   } else {
-    next({ name: "SelectWorkspacePage" });
-  }
-};
-
-const ifHaveAgencies = (to, from, next) => {
-  if (localStorage.getItem("eh-agencylist")) {
-    next();
-  } else {
-    next({ name: "LoginPage" });
+    next({ name: "HomePage" });
   }
 };
 
@@ -39,7 +31,7 @@ const routes = [
     path: "/select-workspace",
     name: "SelectWorkspacePage",
     component: () => import("../views/SelectWorkspace.vue"),
-    beforeEnter: ifHaveAgencies,
+    beforeEnter: ifNotAuthenticated,
   },
   {
     path: "/home",
@@ -58,12 +50,13 @@ const routes = [
     name: "ProfilePage",
     component: () => import("../views/Profile.vue"),
     beforeEnter: ifAuthenticated,
-  },
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
 
 export default router;
