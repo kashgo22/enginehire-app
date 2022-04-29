@@ -1,18 +1,20 @@
 <template>
   <ion-item>
     <ion-label :class="labelClasses" position="floating">{{ label }}</ion-label>
-    <ion-input v-bind="$attrs" :value="inputVal" @input="inputHandler"></ion-input>
-    <ion-note v-for="error in errors" :key="error.id" class="text-sm" color="danger">{{error}}</ion-note>
+    <ion-input v-bind="$attrs" :value="inputVal" @input="inputHandler">
+    </ion-input>
+    <ion-note v-for="error in errors" :key="error.id" class="text-sm"
+      color="danger">{{ error }}</ion-note>
   </ion-item>
 </template>
 
 <script>
-import { IonLabel, IonInput, IonItem } from "@ionic/vue";
+import { IonLabel, IonInput, IonItem, IonNote } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "InputField",
-  components: { IonLabel, IonInput, IonItem },
+  components: { IonLabel, IonInput, IonItem, IonNote },
   props: {
     label: {
       type: String,
@@ -40,7 +42,7 @@ export default defineComponent({
     },
   },
   data: () => ({
-      inputVal: ''
+    inputVal: ''
   }),
   computed: {
     labelClasses() {

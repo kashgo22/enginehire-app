@@ -1,6 +1,6 @@
 {
-	"appId": "com.ionic.grundsteuer",
-	"appName": "Agencybox App",
+	"appId": "com.ionic.enginehire",
+	"appName": "Enginehire App",
 	"webDir": "dist",
 	"bundledWebRuntime": false
 }

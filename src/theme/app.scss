@@ -4,7 +4,13 @@
 :host(.button-full:not(.button-round)) .button-native {
   border-radius: inherit !important;
 }
-
+ion-title {
+  position: relative; 
+}
+ion-row {
+  width: 100%;
+  display: block;
+}
 /* utility classes*/
 .text {
   &-default {
@@ -377,7 +383,7 @@ $display: (
 
 @each $name, $value in $display {
   .#{$name} {
-    display: #{$value};
+    display: #{$value} !important;
   }
 }
 
@@ -422,6 +428,19 @@ $alignItems: (
 @each $name, $value in $alignItems {
   .items-#{$name} {
     align-items: #{$value} !important;
+  }
+}
+$alignContent: (
+  center	center,
+  start	flex-start,
+  end flex-end,
+  between space-between,
+  around space-around,
+  evenly space-evenly
+);
+@each $name, $value in $alignContent {
+  .items-#{$name} {
+    align-content: #{$value} !important;
   }
 }
 $JustifyContent: (

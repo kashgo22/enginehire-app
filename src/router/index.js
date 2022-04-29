@@ -28,6 +28,12 @@ const routes = [
     beforeEnter: ifNotAuthenticated,
   },
   {
+    path: "/select-workspace",
+    name: "SelectWorkspacePage",
+    component: () => import("../views/SelectWorkspace.vue"),
+    beforeEnter: ifNotAuthenticated,
+  },
+  {
     path: "/home",
     name: "HomePage",
     component: () => import("../views/Home.vue"),
@@ -44,12 +50,13 @@ const routes = [
     name: "ProfilePage",
     component: () => import("../views/Profile.vue"),
     beforeEnter: ifAuthenticated,
-  },
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
 
 export default router;
